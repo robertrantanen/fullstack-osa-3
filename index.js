@@ -1,8 +1,14 @@
 const express = require('express')
 const app = express()
-const bodyParser = require('body-parser')
 
+const bodyParser = require('body-parser')
 app.use(bodyParser.json())
+
+const morgan = require('morgan')
+morgan.token('data', function(req) { return JSON.stringify(reg.data)})
+
+app.use(morgan(' :method :url :res[content-length] - :response-time ms'))
+
 
 let persons = [
   {
@@ -55,11 +61,11 @@ app.delete('/api/persons/:id', (req, res) => {
   res.status(204).end()
 })
 
-app.post('/api/persons', (request, response) => {
-  const body = request.body
+app.post('/api/persons', (req, res) => {
+  const body = req.body
 
   if (!body.name || !body.number) {
-    return response.status(400).json({ 
+    return res.status(400).json({ 
       error: 'name or number missing' 
     })
   }
@@ -67,7 +73,7 @@ app.post('/api/persons', (request, response) => {
   const personNames = persons.map(p => p.name)
 
   if (personNames.includes(body.name)) {
-    return response.status(400).json({ 
+    return res.status(400).json({ 
       error: 'name must be unique' 
     })
   }
@@ -80,7 +86,7 @@ app.post('/api/persons', (request, response) => {
 
   persons = persons.concat(person)
 
-  response.json(person)
+  res.json(person)
 })
 
 
