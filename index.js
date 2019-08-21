@@ -1,5 +1,8 @@
 const express = require('express')
 const app = express()
+const bodyParser = require('body-parser')
+
+app.use(bodyParser.json())
 
 let persons = [
   {
@@ -21,11 +24,6 @@ let persons = [
     "name": "Mary Poppendieck",
     "number": "39-23-6423122",
     "id": 4
-  },
-  {
-    "name": "testi",
-    "number": "123",
-    "id": 5
   }
 ]
   
@@ -55,6 +53,34 @@ app.delete('/api/persons/:id', (req, res) => {
   persons = persons.filter(p => p.id !== id)
 
   res.status(204).end()
+})
+
+app.post('/api/persons', (request, response) => {
+  const body = request.body
+
+  if (!body.name || !body.number) {
+    return response.status(400).json({ 
+      error: 'name or number missing' 
+    })
+  }
+
+  const personNames = persons.map(p => p.name)
+
+  if (personNames.includes(body.name)) {
+    return response.status(400).json({ 
+      error: 'name must be unique' 
+    })
+  }
+
+  const person = {
+    name: body.name,
+    number: body.number,
+    id: Math.floor(Math.random() * 10000)
+  }
+
+  persons = persons.concat(person)
+
+  response.json(person)
 })
 
 
