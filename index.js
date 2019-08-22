@@ -4,6 +4,8 @@ const app = express()
 const bodyParser = require('body-parser')
 app.use(bodyParser.json())
 
+app.use(express.static('build'))
+
 const cors = require('cors')
 app.use(cors())
 
