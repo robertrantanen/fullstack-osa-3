@@ -4,6 +4,9 @@ const app = express()
 const bodyParser = require('body-parser')
 app.use(bodyParser.json())
 
+const cors = require('cors')
+app.use(cors())
+
 const morgan = require('morgan')
 morgan.token('data', function(req) { return JSON.stringify(reg.data)})
 
