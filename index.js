@@ -71,6 +71,7 @@ app.delete('/api/persons/:id', (req, res) => {
   res.status(204).end()
 })
 
+
 app.post('/api/persons', (req, res) => {
   const body = req.body
 
@@ -80,6 +81,18 @@ app.post('/api/persons', (req, res) => {
     })
   }
 
+  const person = new Person({
+    name: body.name,
+    number: body.number
+  })
+
+  person.save().then(savedPerson => {
+    res.json(savedPerson.toJSON())
+  })
+})
+
+
+/*
   const personNames = persons.map(p => p.name)
 
   if (personNames.includes(body.name)) {
@@ -87,17 +100,8 @@ app.post('/api/persons', (req, res) => {
       error: 'name must be unique' 
     })
   }
+  */
 
-  const person = {
-    name: body.name,
-    number: body.number,
-    id: Math.floor(Math.random() * 10000)
-  }
-
-  persons = persons.concat(person)
-
-  res.json(person)
-})
 
 
 const PORT = process.env.PORT
