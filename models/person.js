@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 
 const url = process.env.MONGODB_URI
 
-mongoose.connect(String(url), { useNewUrlParser: true })
+mongoose.connect(String(url), { useNewUrlParser: true }, { useMongoClient:true })
   .then(result => {
     console.log('connected to MongoDB')
   })
